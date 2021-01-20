@@ -1,0 +1,7 @@
+# 全てlayer pandasに入れた。
+#reportlab==3.5.56
+#python-dateutil== 2.8.1
+#pandas==1.2.0
+#MonthDelta
+#AWSが容易してくれている奴を利用する
+#numpy==1.19.5
