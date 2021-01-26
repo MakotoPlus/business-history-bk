@@ -22,11 +22,14 @@ frameworkVersion: '2'
 
 plugins:
   - serverless-python-requirements
+  - serverless-offline
 
 custom:
   s3bucketname: business-history-bk
-  ACCESS_CONTROL_ALLOW_ORIGIN: https://cl-business-history.s3-ap-northeast-1.amazonaws.com
-
+  #ACCESS_CONTROL_ALLOW_ORIGIN: https://cl-business-history.s3-ap-northeast-1.amazonaws.com
+  ACCESS_CONTROL_ALLOW_ORIGIN: '*'
+  #API_KEY_NAME: api-business-history-bk
+  #API_KEY_VALUE: Z5j3hrX5Aj5SJ2uozOXOk8TvewW6WETW3R3FSatJ
 provider:
   name: aws
   runtime: python3.8
@@ -38,9 +41,13 @@ provider:
   environment:
     S3_BUCKET: ${self:custom.s3bucketname}
     ACCESS_CONTROL_ALLOW_ORIGIN: ${self:custom.ACCESS_CONTROL_ALLOW_ORIGIN}
-#  既にあるとエラーになるのでコメントアウト
-  apiKeys:             # APIキーを生成
-    - api-business-history-bk          # APIキー名
+  apiGateway:
+    apiKeys:             # APIキーを生成
+      api-business-history-bk
+      #- paid:  #使用量プラン
+      #${self.custom.API_KEY_NAME}
+      #- ${stage}-${self.custom.API_KEY_NAME} # APIキー名
+      #  value: ${self.custom.API_KEY_VALUE}
 
 # you can overwrite defaults here
 #  stage: dev
@@ -90,6 +97,8 @@ package:
     - venv/**
     - node_modules/**
     - .vscode/**
+    - .git/**
+    - layer/**
 #    - exclude-me.py
 #    - exclude-me-dir/**
 

@@ -23,7 +23,10 @@ def run(event, context):
 
     # バイナリデータを取得しエンコードを実施する
     #
-    body_dict = json.loads(event['body'])
+    if isinstance(event['body'], dict):
+        body_dict = event['body']
+    else:
+        body_dict = json.loads(event['body'])
     print('message key is ', ('message' in body_dict ))
     if False == ('message' in body_dict ):
         response = {

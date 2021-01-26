@@ -81,8 +81,8 @@ def run(event, context):
     response = {
         "headers": {
             "Content-Type": "application/pdf",
-            #"Access-Control-Allow-Origin": "*"  # CORS設定
-            "Access-Control-Allow-Origin":  "https://cl-business-history.s3-ap-northeast-1.amazonaws.com"
+            "Access-Control-Allow-Origin": "*"  # CORS設定
+            #"Access-Control-Allow-Origin":  "https://cl-business-history.s3-ap-northeast-1.amazonaws.com"
             
         }
         ,"statusCode": 200,
