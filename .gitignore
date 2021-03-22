@@ -21,3 +21,6 @@ var/
 node_modules/
 venv/
 .serverless/
+conf/
+.dynamodb/
+tmp/

@@ -4,7 +4,13 @@
     // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "Python: userinfo-update",
+            "type": "python",
+            "request": "launch",
+            "program": "./userinfo/userinfo-update.py",
+            "console": "integratedTerminal"
+        },
         {
             "name": "Python: アタッチ",
             "type": "python",
@@ -19,16 +25,17 @@
                     "remoteRoot": "."
                 }
             ]
-        }
-        ,
+        },
         {
             "name": "Serverless Lambda",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/node_modules/serverless/bin/serverless",
-            "args": ["invoke local -f put -p testdata003_local.json"],
+            "args": [
+                "invoke local -f put -p testdata003_local.json"
+            ],
             "port": 9229,
             "console": "integratedTerminal"
-          }
+        }
     ]
 }

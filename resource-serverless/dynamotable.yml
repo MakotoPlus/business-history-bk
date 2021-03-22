@@ -1,0 +1,69 @@
+#
+# Dynamo Table用 YML
+#
+#
+Resources:
+    DynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        # キーの型を指定
+        AttributeDefinitions:
+          -
+            AttributeName: uuid
+            AttributeType: S
+          -
+            AttributeName: full_name
+            AttributeType: S
+        #  -
+        #    AttributeName: family_name_kana
+        #    AttributeType: S
+        # キーの種類を指定（ハッシュorレンジキー）
+        KeySchema:
+          -
+            AttributeName: uuid
+            KeyType: HASH
+        #  -
+        #    AttributeName: full_name
+        #    KeyType: RANGE
+        # プロビジョニングするキャパシティーユニットの設定
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        #ローカルセカンダリインデックス
+        # セカンダリインデックスが無い場合ローカルセカンダリインデックスの作成が出来ないため
+        # コメントアウト
+        # 
+        #LocalSecondaryIndexes:
+        #- IndexName: dev_m_user_family_name_kana
+        #  KeySchema :
+        #    -
+        #      AttributeName: uuid
+        #      KeyType: HASH
+        #    -
+        #      AttributeName: family_name_kana
+        #      KeyType: RANGE
+        #  Projection:
+        #    NonKeyAttributes:
+        #    - family_name_kana
+        #    ProjectionType : INCLUDE
+        # グローバルセカンダリインデックス
+        GlobalSecondaryIndexes:
+          - 
+            IndexName: 
+              dev_m_user_index_full_name
+            Projection:
+              ProjectionType: INCLUDE
+              NonKeyAttributes:
+                -
+                  full_name
+            ProvisionedThroughput:
+              WriteCapacityUnits: 5
+              ReadCapacityUnits: 10
+            KeySchema:
+              -
+                AttributeName: uuid
+                KeyType: HASH
+              -
+                AttributeName: full_name
+                KeyType: RANGE
+        TableName: ${self:provider.stage}_m_user

@@ -1,0 +1,140 @@
+  #---------------------------------------
+  # Cognito認証後イベントHandlerの設定
+  #
+  # イベント種類：
+  #  CreateAuthChallenge:認証チャレンジを作成します。
+  #  CustomMessage:カスタム Message AWS Lambda トリガー。
+  #  DefineAuthChallenge:認証チャレンジを定義します。
+  #  PostAuthentication:認証後 AWS Lambda トリガー。
+  #  PostConfirmation:確認後 AWS Lambda トリガー。
+  #  PreAuthentication:事前認証 AWS Lambda トリガー。
+  #  PreSignUp:事前登録 AWS Lambda トリガー。
+  #  PreTokenGeneration:トークンの生成前に呼び出される Lambda トリガー。
+  #  UserMigration:ユーザー移行 Lambda 設定タイプ。
+  #  VerifyAuthChallengeResponse:認証チャレンジレスポンスを確認します。
+  # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html
+  #---------------------------------------
+  postConfirmation:
+    handler: cognito/cognito_triger_PostConfirmation.run
+    package:
+      include:
+        - cognito/cognito_triger_PostConfirmation.py
+    events:
+      - cognitoUserPool:
+          pool: ${self:provider.stage}-${self:custom.cognito-name}
+          trigger: PostConfirmation
+          existing: true
+  postAuthentication:
+    handler: cognito/cognito_triger_postAuthentication.run
+    package:
+      include:
+        - cognito/cognito_triger_postAuthentication.py
+    events:
+      - cognitoUserPool:
+          pool: ${self:provider.stage}-${self:custom.cognito-name}
+          trigger: PostAuthentication
+          existing: true
+  handlerget:
+    handler: handler.run
+    package:
+      include:
+        - handler.py
+    events:
+     - http:           # API Gatewayの設定
+        path: run
+        method: get
+##        private: true  # APIキーを使用する
+        cors: true     # API GatewayにCORSの設定をする
+  outputpdf:
+    handler: businesshistory/outputpdf.run
+    package:
+      include:
+        - businesshistory/outputpdf.py
+        - businesshistory/report01.py
+    events:
+     - http:           # API Gatewayの設定
+        path: run
+        method: put
+        #private: true  # APIキーを使用する
+        cors: true     # API GatewayにCORSの設定をする
+    layers:
+      - ${self:custom.LAYERS_01}
+  userinfo-put:
+    handler: userinfo/userinfo-update.run
+    package:
+      include:
+        - userinfo/userinfo-update.py
+    events:
+     - http:           # API Gatewayの設定
+        path: userinfo/{uuid}
+        method: put
+        #private: true  # APIキーを使用する
+        cors: true     # API GatewayにCORSの設定をする
+        authorizer:     # Lambdaオーソライザーの設定
+          type: COGNITO_USER_POOLS
+          authorizerId:
+            Ref: ApiGatewayAuthorizer
+    layers:
+      - ${self:custom.LAYERS_01}
+  userinfo-get:
+    handler: userinfo/userinfo.run
+    package:
+      include:
+        - userinfo/userinfo.py
+    events:
+     - http: # API Gatewayの設定
+        path: userinfo/{uuid}
+        method: get
+        #private: true  # APIキーを使用する
+        cors: true      # API GatewayにCORSの設定をする
+        authorizer:     # Lambdaオーソライザーの設定
+          type: COGNITO_USER_POOLS
+          authorizerId:
+            Ref: ApiGatewayAuthorizer
+    layers:
+      - ${self:custom.LAYERS_01}
+
+
+
+#     - s3: ${self:environment.s3backet}
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - httpApi:
+#          path: /users/create
+#          method: get
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+#      - alb:
+#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
+#          priority: 1
+#          conditions:
+#            host: example.com
+#            path: /hello
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here

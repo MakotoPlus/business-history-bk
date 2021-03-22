@@ -1,0 +1,19 @@
+{
+        "initial": "M.F",
+        "family_name": "fukuda",
+        "given_name": "makoto",
+        "family_name_kana": "fukdakana",
+        "given_name_kana": "makotokana",
+        "birthday": {
+            "year": 1972,
+            "month": 10,
+            "day": 5
+        },
+        "sex": "ma",
+        "station": "warab-----i",
+        "train": "train",
+        "address": "saitama",
+        "date_joined": "schho000000ool",
+        "pr": "apr",
+        "qualifications": "aws"
+}
