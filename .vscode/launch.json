@@ -5,6 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: userinfo",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/userinfo/userinfo.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder};${workspaceFolder}/layer/common-layer/layer/python"
+            }
+        },
+        {
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder},${workspaceFolder}/layer/common-layer/layer/python"
+            ],
+            "name": "Launch Extension",
+            "outFiles": [
+                "${workspaceFolder}/out/**/*.js"
+            ],
+            "preLaunchTask": "npm",
+            "request": "launch",
+            "type": "pwa-extensionHost"
+        },
+        {
             "name": "Python: userinfo-update",
             "type": "python",
             "request": "launch",

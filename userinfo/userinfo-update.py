@@ -11,17 +11,9 @@ import json
 import boto3
 import ast
 from boto3.dynamodb.conditions import Key
+import common_log
+import common_const
 
-ENV_ACCESS_CONTROL_ALLOW_ORIGIN = 'ACCESS_CONTROL_ALLOW_ORIGIN'
-ENV_M_USER = 'TABLE_M_USER'
-PARAM_USERID = 'uuid'
-ERROR_MESSAGE = 'サーバエラーが発生しました'
-ERROR_NO_USERID = 'ERROR_NO_USERID'
-DYNAMODB_ENDPOINT='DYNAMODB_ENDPOINT'
-
-SUCCESS_CODE = 200
-ERROR_REQUEST = 400
-ERROR_INTERNAL = 500
 
 def get_env() -> dict:
     '''
@@ -36,9 +28,9 @@ def get_env() -> dict:
 
     '''
     param_dict = {}
-    param_dict[ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = os.environ[ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
-    param_dict[ENV_M_USER] = os.environ[ENV_M_USER]
-    param_dict[DYNAMODB_ENDPOINT] = os.environ[DYNAMODB_ENDPOINT]
+    param_dict[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = os.environ[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
+    param_dict[common_const.ENV_M_USER] = os.environ[common_const.ENV_M_USER]
+    param_dict[common_const.DYNAMODB_ENDPOINT] = os.environ[common_const.DYNAMODB_ENDPOINT]
     return param_dict
 
 def init(event) -> (dict, dict):
@@ -58,24 +50,14 @@ def init(event) -> (dict, dict):
     print('get_env start')
     param_dict = get_env()
     # パラメータ取得
-    param_dict[PARAM_USERID] = event['pathParameters'][PARAM_USERID]
+    param_dict[common_const.PARAM_USERID] = event['pathParameters'][common_const.PARAM_USERID]
     # ENV_ACCESS_CONTROL_ALLOW_ORIGINの値をevent['headers']['origin']が設定されていた場合は
     # 入替て設定する
-    print(param_dict[PARAM_USERID])
+    print(param_dict[common_const.PARAM_USERID])
     if 'origin' in event['headers']:
         print('set headers origin')
-        param_dict[ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = event['headers']['origin']    
-    #print('JSON')
-    #print(json.loads(event['body'].encode('utf-8')))
-    #print(json.loads(event['body']))
-    #print('literal_eval')
-    #print(ast.literal_eval(event['body']))
-    param_record = ast.literal_eval(event['body']);
-    #param_record = json.loads(event['body']);
-    param_record['full_name'] = '{0} {1}'.format( param_record['family_name'], param_record['given_name'])
-
-    print('param_record-full_name')
-    print(param_record['full_name'])
+        param_dict[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = event['headers']['origin']    
+    param_record = ast.literal_eval(event['body']);    
     return param_dict, param_record
 
 def get_response(param_dict) -> dict :
@@ -86,7 +68,7 @@ def get_response(param_dict) -> dict :
             #
             # 'Access-Control-Allow-Origin': '*'  
             #,'Vary':'Origin'
-            'Access-Control-Allow-Origin': param_dict[ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
+            'Access-Control-Allow-Origin': param_dict[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
             ,'Access-Control-Allow-Methods':'GET, PUT, DELETE, OPTIONS'
             ,'Access-Control-Allow-Headers':'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
             ,'Access-Control-Allow-Credentials':'true'
@@ -120,9 +102,9 @@ def main(param_dict, param_record, ret_dict ) -> dict :
     '''
     try:
         print('主処理')
-        if param_dict[DYNAMODB_ENDPOINT]:
-            print('endpoint url={0} '.format(param_dict[DYNAMODB_ENDPOINT]))
-            dynamodb = boto3.resource('dynamodb', endpoint_url=param_dict[DYNAMODB_ENDPOINT])
+        if param_dict[common_const.DYNAMODB_ENDPOINT]:
+            print('endpoint url={0} '.format(param_dict[common_const.DYNAMODB_ENDPOINT]))
+            dynamodb = boto3.resource('dynamodb', endpoint_url=param_dict[common_const.DYNAMODB_ENDPOINT])
         else:
             print('endpoint url=Nothing')
             dynamodb = boto3.resource('dynamodb')
@@ -140,22 +122,22 @@ def main(param_dict, param_record, ret_dict ) -> dict :
 
         #---------------------------------------------------
         # データ取得
-        table_m_user = dynamodb.Table(param_dict[ENV_M_USER])
+        table_m_user = dynamodb.Table(param_dict[common_const.ENV_M_USER])
         #response = table_m_user.query(
         #    KeyConditionExpression=Key('uuid').eq(param_dict[PARAM_USERID])
         #)
-        print('get_item uuid:{0}'.format(param_dict[PARAM_USERID]))
-        response = table_m_user.get_item(Key={'uuid':param_dict[PARAM_USERID]})
+        print('get_item uuid:{0}'.format(param_dict[common_const.PARAM_USERID]))
+        response = table_m_user.get_item(Key={'uuid':param_dict[common_const.PARAM_USERID]})
         print(response)
         if False == ('Item' in response):
             errmsg = {
                 'message': '{0}:{1}'.format(
-                    ERROR_NO_USERID
-                    ,param_dict[PARAM_USERID]
+                    common_const.ERROR_NO_USERID
+                    ,param_dict[common_const.PARAM_USERID]
                     )
             }
             ret_dict['body'] = json.dumps(errmsg)
-            ret_dict['statusCode'] = ERROR_REQUEST
+            ret_dict['statusCode'] = common_const.ERROR_REQUEST
             return ret_dict
 
         #---------------------------------------------------
@@ -166,32 +148,19 @@ def main(param_dict, param_record, ret_dict ) -> dict :
         print(type(param_record['birthday']['year']))
         print(param_record['birthday']['year'])
 
-        ######################################
-        # キーではなくなったのでコメントアウト
-        # UPDATE すると両方のDICTが更新されてしまうため、事前にFULL_NAMEを取得して置く
-        #full_name = response['Item']['full_name']
-        #user_dict.update(param_record)
-
         table_m_user.update_item(
             Key = { 
                 'uuid' : user_dict['uuid']
             }
-            ,UpdateExpression = 'set full_name=:full_name '    \
-                ', family_name=:family_name, given_name=:given_name '    \
-                ', family_name_kana=:family_name_kana, given_name_kana=:given_name_kana '    \
+            ,UpdateExpression = 'set '    \
+                '  family_name_kana=:family_name_kana, given_name_kana=:given_name_kana '    \
                 ', sex=:sex, train=:train '    \
                 ', station=:station, date_joined=:date_joined'   \
                 ', initial=:initial, address=:address'   \
                 ', pr=:pr, qualifications=:qualifications'   \
                 ', birthday=:birthday'   \
-#                    ', birthday.year=:year'   \
-#                    ', birthday.month=:month'   \
-#                    ', birthday.day=:day'
             ,ExpressionAttributeValues = {
-                ':full_name' : param_record['full_name']
-                ,':family_name': param_record['family_name']
-                ,':given_name': param_record['given_name']
-                ,':family_name_kana': param_record['family_name_kana']
+                ':family_name_kana': param_record['family_name_kana']
                 ,':given_name_kana': param_record['given_name_kana']
                 ,':sex': param_record['sex']
                 ,':train': param_record['train']
@@ -202,14 +171,11 @@ def main(param_dict, param_record, ret_dict ) -> dict :
                 ,':pr': param_record['pr']
                 ,':qualifications': param_record['qualifications']
                 ,':birthday': param_record['birthday']
-#                    ,':year': str(param_record['birthday']['year'])
-#                    ,':month': str(param_record['birthday']['month'])
-#                    ,':day': str(param_record['birthday']['day'])
             }
             ,ReturnValues = "UPDATED_NEW"
         )
         ret_dict['body'] = json.dumps(param_record)
-        ret_dict['statusCode'] = SUCCESS_CODE
+        ret_dict['statusCode'] = common_const.SUCCESS_CODE
         return ret_dict
     except:
         print('メイン処理で例外発生')
@@ -217,10 +183,10 @@ def main(param_dict, param_record, ret_dict ) -> dict :
         import traceback
         traceback.print_exc()
         errmsg = {
-            'message': ERROR_MESSAGE
+            'message': common_const.ERROR_MESSAGE_001
         }
         ret_dict['body'] = json.dumps(errmsg)
-        ret_dict['statusCode'] = ERROR_REQUEST
+        ret_dict['statusCode'] = common_const.ERROR_REQUEST
         return ret_dict    
 
 
@@ -262,8 +228,8 @@ if __name__ == '__main__':
     print('start')
 
     FILENAME="test_data.json"
-    os.environ[ENV_M_USER] = 'm_user'
-    os.environ[ENV_ACCESS_CONTROL_ALLOW_ORIGIN]='test'
+    os.environ[common_const.ENV_M_USER] = 'm_user'
+    os.environ[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN]='test'
 
     #ファイル読込
     data = {}

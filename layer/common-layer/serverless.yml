@@ -1,0 +1,35 @@
+service: common-layer
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: ap-northeast-1
+
+layers:
+  common:
+    path: layer # required, path to layer contents on disk
+    package:
+      include:
+        - layer/**
+      exclude:
+        - python/pandas-1.2s.zip
+    allowedAccounts:
+    - '*' # ALL accounts!
+    #name: ${opt:stage, self:provider.stage, 'dev'}-layerName # optional, Deployed Lambda layer name
+    name: ${opt:stage, self:provider.stage, 'dev'}-commonlibs # optional, Deployed Lambda layer name
+    description: Description of what the lambda layer does # optional, Description to publish to AWS
+    compatibleRuntimes: # optional, a list of runtimes this layer is compatible with
+      - python3.8
+    #licenseInfo: GPLv3 # optional, a string specifying license information
+    # allowedAccounts: # optional, a list of AWS account IDs allowed to access this layer.
+    #   - '*'
+    # note: uncommenting this will give all AWS users access to this layer unconditionally.
+    retain: false # optional, false by default. If true, layer versions are not deleted as new ones are created
+
+resources:
+  Outputs:
+    CommonLayerExport:
+      Value:
+        Ref: CommonLambdaLayer
+      Export:
+        Name: CommonLambdaLayer

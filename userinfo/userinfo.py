@@ -9,19 +9,22 @@
 import os
 import json
 import boto3
+import traceback
 from decimal import Decimal
 from boto3.dynamodb.conditions import Key
+import common_log
+import common_const
 
+'''
 ENV_ACCESS_CONTROL_ALLOW_ORIGIN = 'ACCESS_CONTROL_ALLOW_ORIGIN'
 ENV_M_USER = 'TABLE_M_USER'
 PARAM_USERID = 'uuid'
 ERROR_MESSAGE = 'サーバエラーが発生しました'
 DYNAMODB_ENDPOINT='DYNAMODB_ENDPOINT'
-
 SUCCESS_CODE = 200
 ERROR_REQUEST = 400
 ERROR_INTERNAL = 500
-
+'''
 
 def decimal_default_proc(obj):
     if isinstance(obj, Decimal):
@@ -42,9 +45,9 @@ def get_env() -> dict:
 
     '''
     param_dict = {}
-    param_dict[ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = os.environ[ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
-    param_dict[ENV_M_USER] = os.environ[ENV_M_USER]
-    param_dict[DYNAMODB_ENDPOINT] = os.environ[DYNAMODB_ENDPOINT]
+    param_dict[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = os.environ[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
+    param_dict[common_const.ENV_M_USER] = os.environ[common_const.ENV_M_USER]
+    param_dict[common_const.DYNAMODB_ENDPOINT] = os.environ[common_const.DYNAMODB_ENDPOINT]
     return param_dict
 
 def init(event) -> dict:
@@ -62,10 +65,10 @@ def init(event) -> dict:
     '''
     param_dict = get_env()
     # パラメータ取得
-    param_dict[PARAM_USERID] = event['pathParameters'][PARAM_USERID]
+    param_dict[common_const.PARAM_USERID] = event['pathParameters'][common_const.PARAM_USERID]
 
     if 'origin' in event['headers']:
-        param_dict[ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = event['headers']['origin']
+        param_dict[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = event['headers']['origin']
         
     return param_dict
 
@@ -77,7 +80,7 @@ def get_response(param_dict) -> dict :
             #
             # 'Access-Control-Allow-Origin': '*'  
             #,'Vary':'Origin'
-            'Access-Control-Allow-Origin': param_dict[ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
+            'Access-Control-Allow-Origin': param_dict[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
             ,'Access-Control-Allow-Methods':'GET, PUT, DELETE, OPTIONS'
             ,'Access-Control-Allow-Headers':'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
             ,'Access-Control-Allow-Credentials':'true'
@@ -100,15 +103,16 @@ def main(param_dict, ret_dict) -> dict :
     '''
     try:
         print('主処理')
-        if param_dict[DYNAMODB_ENDPOINT]:
-            print('endpoint url={0} '.format(param_dict[DYNAMODB_ENDPOINT]))
-            dynamodb = boto3.resource('dynamodb', endpoint_url=param_dict[DYNAMODB_ENDPOINT])
+
+        if param_dict[common_const.DYNAMODB_ENDPOINT]:
+            print('endpoint url={0} '.format(param_dict[common_const.DYNAMODB_ENDPOINT]))
+            dynamodb = boto3.resource('dynamodb', endpoint_url=param_dict[common_const.DYNAMODB_ENDPOINT])
         else:
             print('endpoint url=Nothing')
             dynamodb = boto3.resource('dynamodb')
-        table_m_user = dynamodb.Table(param_dict[ENV_M_USER])
+        table_m_user = dynamodb.Table(param_dict[common_const.ENV_M_USER])
         response = table_m_user.query(
-            KeyConditionExpression=Key('uuid').eq(param_dict[PARAM_USERID])
+            KeyConditionExpression=Key('uuid').eq(param_dict[common_const.PARAM_USERID])
         )
         print('get_item')
         print(response)
@@ -116,19 +120,18 @@ def main(param_dict, ret_dict) -> dict :
         #ret_dict['body'] = json.dumps(user_dict)
         ret_dict['body'] = json.dumps(user_dict, default=decimal_default_proc)
 
-        ret_dict['statusCode'] = SUCCESS_CODE
+        ret_dict['statusCode'] = common_const.SUCCESS_CODE
         #print('result dict')
         #print(ret_dict)
         return ret_dict
     except:
         print('メイン処理で例外発生')
-        import traceback
         traceback.print_exc()
         errmsg = {
-            'message': ERROR_MESSAGE
+            'message': common_const.ERROR_MESSAGE_001
         }
         ret_dict['body'] = json.dumps(errmsg)
-        ret_dict['statusCode'] = ERROR_REQUEST
+        ret_dict['statusCode'] = common_const.ERROR_REQUEST
         return ret_dict    
 
 def run(event,context):
@@ -149,6 +152,14 @@ def run(event,context):
     # ログ出力後終了する。
     try :
         print('start')
+        common_log.output(
+            common_log.LOG_INFO
+            ,'START'
+            ,event
+            ,'run'
+            ,1
+        )
+
         print(event)
         #初期処理
         print('初期処理')
@@ -162,8 +173,11 @@ def run(event,context):
         ret_dict = main(param_dict, ret_dict)
         print(ret_dict)
         return ret_dict
-    except Exception as e:
+    except :
         print('初期処理で例外発生')
-        print(e)
+        traceback.print_exc()
         return
 
+if __name__ == '__main__':
+    print('start')
+    common_log.output(common_log.LOG_ERROR, 'メッセージ')

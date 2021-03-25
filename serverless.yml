@@ -55,6 +55,7 @@ provider:
        ${self:custom.ROLE_ARN}
 # you can define service wide environment variables here
   environment:
+    LAYER_COMMON: common-layer
     S3_BUCKET: ${self:custom.s3bucketname}
     ACCESS_CONTROL_ALLOW_ORIGIN: ${self:custom.ACCESS_CONTROL_ALLOW_ORIGIN}
     TABLE_M_USER: ${self:custom.TABLE.M_USER}
@@ -140,6 +141,12 @@ package:
     - package-lock.json
     - workspace.code-workspace
     - migrations/**
+    - package.json
+    - pyrightconfig.json
+    - requirements.txt
+    - serverless - コピー.yml
+    - testdata001.json
+
 #    - exclude-me.py
 #    - exclude-me-dir/**
 
@@ -194,5 +201,5 @@ Outputs:
     #    Name: apiGateway-authorizerId-${opt:stage, self:provider.stage}
     #apiAuthorizerId:
     #  Value: !Ref SharedApiGatewayAuthorizer
-
+    CommonLayerExport:
 

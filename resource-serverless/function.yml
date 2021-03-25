@@ -24,6 +24,9 @@
           pool: ${self:provider.stage}-${self:custom.cognito-name}
           trigger: PostConfirmation
           existing: true
+    layers:
+      - ${self:custom.LAYERS_01}
+      - ${cf:${self:provider.environment.LAYER_COMMON}-${opt:stage, self:provider.stage}.CommonLayerExport}
   postAuthentication:
     handler: cognito/cognito_triger_postAuthentication.run
     package:
@@ -34,6 +37,9 @@
           pool: ${self:provider.stage}-${self:custom.cognito-name}
           trigger: PostAuthentication
           existing: true
+    layers:
+      - ${self:custom.LAYERS_01}
+      - ${cf:${self:provider.environment.LAYER_COMMON}-${opt:stage, self:provider.stage}.CommonLayerExport}
   handlerget:
     handler: handler.run
     package:
@@ -76,6 +82,7 @@
             Ref: ApiGatewayAuthorizer
     layers:
       - ${self:custom.LAYERS_01}
+      - ${cf:${self:provider.environment.LAYER_COMMON}-${opt:stage, self:provider.stage}.CommonLayerExport}
   userinfo-get:
     handler: userinfo/userinfo.run
     package:
@@ -93,6 +100,7 @@
             Ref: ApiGatewayAuthorizer
     layers:
       - ${self:custom.LAYERS_01}
+      - ${cf:${self:provider.environment.LAYER_COMMON}-${opt:stage, self:provider.stage}.CommonLayerExport}
 
 
 
