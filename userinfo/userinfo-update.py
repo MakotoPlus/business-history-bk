@@ -13,27 +13,10 @@ import ast
 from boto3.dynamodb.conditions import Key
 import common_log
 import common_const
+import common_util
+from typing import Tuple
 
-
-def get_env() -> dict:
-    '''
-    環境情報取得
-
-    Parameters
-    ----------------------------------------------
-
-    Returns
-    ----------------------------------------------
-    環境情報 : dict
-
-    '''
-    param_dict = {}
-    param_dict[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN] = os.environ[common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN]
-    param_dict[common_const.ENV_M_USER] = os.environ[common_const.ENV_M_USER]
-    param_dict[common_const.DYNAMODB_ENDPOINT] = os.environ[common_const.DYNAMODB_ENDPOINT]
-    return param_dict
-
-def init(event) -> (dict, dict):
+def init(event) -> Tuple[dict, dict]:
     '''
     初期処理
 
@@ -48,7 +31,7 @@ def init(event) -> (dict, dict):
         更新inputデータ : dict
     '''
     print('get_env start')
-    param_dict = get_env()
+    param_dict = common_util.get_env()
     # パラメータ取得
     param_dict[common_const.PARAM_USERID] = event['pathParameters'][common_const.PARAM_USERID]
     # ENV_ACCESS_CONTROL_ALLOW_ORIGINの値をevent['headers']['origin']が設定されていた場合は
@@ -99,6 +82,8 @@ def main(param_dict, param_record, ret_dict ) -> dict :
         返却用のdict
     Returns
     ----------------------------------------------
+    dict
+        返却用のdict
     '''
     try:
         print('主処理')

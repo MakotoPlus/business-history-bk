@@ -12,28 +12,12 @@ import traceback
 import common_log
 import common_const
 import common_util
+from typing import Tuple
 
 GIVEN_NAME ='given_name'
 FAMILY_NAME = 'family_name'
 
-def get_env() -> dict:
-    '''
-    環境情報取得
-
-    Parameters
-    ----------------------------------------------
-
-    Returns
-    ----------------------------------------------
-    環境情報 : dict
-
-    '''
-    param_dict = {}
-    param_dict[common_const.ENV_M_USER] = os.environ[common_const.ENV_M_USER]
-    param_dict[common_const.DYNAMODB_ENDPOINT] = os.environ[common_const.DYNAMODB_ENDPOINT]
-    return param_dict
-
-def init(event) -> (dict, dict):
+def init(event) -> Tuple[dict, dict]:
     '''
     初期処理
 
@@ -46,7 +30,7 @@ def init(event) -> (dict, dict):
     ----------------------------------------------
 
     '''
-    param_dict = get_env()
+    param_dict = common_util.get_env()
     param_record = {}
     # パラメータ取得
     param_record[common_const.PARAM_USERID] = event['request']['userAttributes']['sub']

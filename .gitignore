@@ -24,3 +24,5 @@ venv/
 conf/
 .dynamodb/
 tmp/
+testdata001.json
+businesshistory/history_data.json

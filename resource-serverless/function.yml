@@ -14,6 +14,7 @@
   #  VerifyAuthChallengeResponse:認証チャレンジレスポンスを確認します。
   # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html
   #---------------------------------------
+
   postConfirmation:
     handler: cognito/cognito_triger_PostConfirmation.run
     package:
@@ -101,6 +102,24 @@
     layers:
       - ${self:custom.LAYERS_01}
       - ${cf:${self:provider.environment.LAYER_COMMON}-${opt:stage, self:provider.stage}.CommonLayerExport}
+  history:
+    handler: businesshistory/history.post
+    package:
+      include:
+        - businesshistory/history.py
+    events:
+     - http: # API Gatewayの設定
+        path: history/{uuid}
+        method: post
+        #private: true  # APIキーを使用する
+        cors: true      # API GatewayにCORSの設定をする
+        authorizer:     # Lambdaオーソライザーの設定
+          type: COGNITO_USER_POOLS
+          authorizerId:
+            Ref: ApiGatewayAuthorizer
+    layers:
+      - ${self:custom.LAYERS_01}
+      - ${cf:${self:provider.environment.LAYER_COMMON}-${opt:stage, self:provider.stage}.CommonLayerExport}
 
 
 
@@ -140,7 +159,6 @@
 #          conditions:
 #            host: example.com
 #            path: /hello
-
 #    Define function environment variables here
 #    environment:
 #      variable2: value2
