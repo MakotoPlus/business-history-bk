@@ -1,8 +1,12 @@
 service: common-layer
+
+custom:
+  stage: ${opt:stage, 'dev'}
+
 provider:
   name: aws
   runtime: python3.8
-  stage: dev
+  stage: ${self:custom.stage}
   region: ap-northeast-1
 
 layers:
@@ -16,7 +20,8 @@ layers:
     allowedAccounts:
     - '*' # ALL accounts!
     #name: ${opt:stage, self:provider.stage, 'dev'}-layerName # optional, Deployed Lambda layer name
-    name: ${opt:stage, self:provider.stage, 'dev'}-commonlibs # optional, Deployed Lambda layer name
+    #name: ${opt:stage, self:provider.stage, 'dev'}-commonlibs # optional, Deployed Lambda layer name
+    name: ${self:provider.stage}-commonlibs # optional, Deployed Lambda layer name
     description: Description of what the lambda layer does # optional, Description to publish to AWS
     compatibleRuntimes: # optional, a list of runtimes this layer is compatible with
       - python3.8
@@ -32,4 +37,4 @@ resources:
       Value:
         Ref: CommonLambdaLayer
       Export:
-        Name: CommonLambdaLayer
+        Name: ${self:provider.stage}-CommonLambdaLayer

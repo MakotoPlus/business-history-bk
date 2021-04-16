@@ -54,7 +54,7 @@ key_st ="ST"
 key_ot ="OT"
 key_om ="OM"
 
-key_his_no = 'no'
+key_hist_no = 'no'
 key_hist_start_date ='start_date'
 key_hist_end_date ='end_date'
 key_hist_industry ='industry'
@@ -124,16 +124,15 @@ key_hist_jobmonth = 'job_hist_month' #就業期間（月)
                     "OT",
                     "OM"
                 ],
-                "technology": 
-                    {
-                        "db" : {
-                            "Oracle":"11g"
-                            ,"SQLite":"2.0"
-                        }
-                        ,"os" : {
-                            "Windows": "10"
-                        }
-                    }        },
+                "technology": {
+                    "db" : {
+                        "Oracle":"11g"
+                        ,"SQLite":"2.0"
+                    }
+                    ,"os" : {
+                        "Windows": "10"
+                    }
+                },
             {
                 "no": 2,
                 "start_date": "yyyy/mm/dd",
@@ -155,8 +154,7 @@ key_hist_jobmonth = 'job_hist_month' #就業期間（月)
                     "OT",
                     "OM"
                 ],
-                "technology": 
-                    {
+                "technology": {
                         "language" : {
                             "java":"80"
                             ,"C#":""
@@ -171,7 +169,7 @@ key_hist_jobmonth = 'job_hist_month' #就業期間（月)
                         ,"os" : {
                             "Windows": "10"
                         }
-                    }
+                }
             }
         ]
     }
@@ -241,7 +239,7 @@ class BusinessHistoryReport:
             #if len(history_data) < 5:
             for i in range(5-len(history_data)):
                 add_dict = {
-                    key_his_no: ''
+                    key_hist_no: ''
                     ,key_hist_start_date:''
                     ,key_hist_end_date:''
                     ,key_hist_industry:''
@@ -540,23 +538,23 @@ class BusinessHistoryFastPage:
         self.pdfFile.setFont(FONT_NAME, 6)
         data = [
                     ['No','期間','','業種','システム','規模','Postion※','人数\n(管理人数)'],
-                    [history_data[0][key_his_no],history_data[0][key_hist_start_month],'',history_data[0][key_hist_industry],history_data[0][key_hist_system],history_data[0][key_hist_scale],history_data[0][key_hist_position],history_data[0][key_hist_number_pepole]],
+                    [history_data[0][key_hist_no],history_data[0][key_hist_start_month],'',history_data[0][key_hist_industry],history_data[0][key_hist_system],history_data[0][key_hist_scale],history_data[0][key_hist_position],history_data[0][key_hist_number_pepole]],
                     ['',history_data[0][key_hist_end_month],'','','','','',''],
                     ['',history_data[0][key_hist_job_yearmonth],'','','','','',''],
                     ['','作\n業\n詳\n細',history_data[0][key_hist_detail],'','','','',''],
-                    [history_data[1][key_his_no],history_data[1][key_hist_start_month],'',history_data[1][key_hist_industry],history_data[1][key_hist_system],history_data[1][key_hist_scale],history_data[1][key_hist_position],history_data[1][key_hist_number_pepole]],
+                    [history_data[1][key_hist_no],history_data[1][key_hist_start_month],'',history_data[1][key_hist_industry],history_data[1][key_hist_system],history_data[1][key_hist_scale],history_data[1][key_hist_position],history_data[1][key_hist_number_pepole]],
                     ['',history_data[1][key_hist_end_month],'','','','','',''],
                     ['',history_data[1][key_hist_job_yearmonth],'','','','','',''],
                     ['','作\n業\n詳\n細',history_data[1][key_hist_detail],'','','','',''],
-                    [history_data[2][key_his_no],history_data[2][key_hist_start_month],'',history_data[2][key_hist_industry],history_data[2][key_hist_system],history_data[2][key_hist_scale],history_data[2][key_hist_position],history_data[2][key_hist_number_pepole]],
+                    [history_data[2][key_hist_no],history_data[2][key_hist_start_month],'',history_data[2][key_hist_industry],history_data[2][key_hist_system],history_data[2][key_hist_scale],history_data[2][key_hist_position],history_data[2][key_hist_number_pepole]],
                     ['',history_data[2][key_hist_end_month],'','','','','',''],
                     ['',history_data[2][key_hist_job_yearmonth],'','','','','',''],
                     ['','作\n業\n詳\n細',history_data[2][key_hist_detail],'','','','',''],
-                    [history_data[3][key_his_no],history_data[3][key_hist_start_month],'',history_data[3][key_hist_industry],history_data[3][key_hist_system],history_data[3][key_hist_scale],history_data[3][key_hist_position],history_data[3][key_hist_number_pepole]],
+                    [history_data[3][key_hist_no],history_data[3][key_hist_start_month],'',history_data[3][key_hist_industry],history_data[3][key_hist_system],history_data[3][key_hist_scale],history_data[3][key_hist_position],history_data[3][key_hist_number_pepole]],
                     ['',history_data[3][key_hist_end_month],'','','','','',''],
                     ['',history_data[3][key_hist_job_yearmonth],'','','','','',''],
                     ['','作\n業\n詳\n細',history_data[3][key_hist_detail],'','','','',''],
-                    [history_data[4][key_his_no],history_data[4][key_hist_start_month],'',history_data[4][key_hist_industry],history_data[4][key_hist_system],history_data[4][key_hist_scale],history_data[4][key_hist_position],history_data[4][key_hist_number_pepole]],
+                    [history_data[4][key_hist_no],history_data[4][key_hist_start_month],'',history_data[4][key_hist_industry],history_data[4][key_hist_system],history_data[4][key_hist_scale],history_data[4][key_hist_position],history_data[4][key_hist_number_pepole]],
                     ['',history_data[4][key_hist_end_month],'','','','','',''],
                     ['',history_data[4][key_hist_job_yearmonth],'','','','','',''],
                     ['','作\n業\n詳\n細',history_data[4][key_hist_detail],'','','','',''],

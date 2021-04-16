@@ -19,7 +19,8 @@ def add_user(userinfo) -> None:
     response = table.put_item(
         Item ={
             'uuid' : userinfo['sub']
-            ,'authority' : userinfo['custom:admin']
+            ,'authority' : '0'
+            ,'compnaycd' : userinfo['custom:companycd']
             ,'full_name' : full_name
             ,'family_name' : userinfo['family_name']
             ,'given_name' : userinfo['given_name']

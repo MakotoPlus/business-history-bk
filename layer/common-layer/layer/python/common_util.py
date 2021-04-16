@@ -23,6 +23,7 @@ def get_env() -> dict:
     keys = [
         common_const.ENV_ACCESS_CONTROL_ALLOW_ORIGIN
         ,common_const.ENV_M_USER
+        ,common_const.ENV_M_COMPANY
         ,common_const.DYNAMODB_ENDPOINT
         ,common_const.ENV_T_WORK_HISTORY
     ]
@@ -32,7 +33,7 @@ def get_env() -> dict:
         if not param_dict[key] :
             common_log.output(common_log.LOG_WARNING,'Key:{0} Nothing'.format(key),'get_env')
         else:
-            common_log.output(common_log.LOG_WARNING,'Key:{0} value:{1}'.format(key,param_dict[key]),'get_env')
+            common_log.output(common_log.LOG_INFO,'Key:{0} value:{1}'.format(key,param_dict[key]),'get_env')
     return param_dict
 
 
