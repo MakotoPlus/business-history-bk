@@ -117,19 +117,26 @@ def create_userdata(param_dict, param_printinf, userid) -> dict:
             return None
 
         userdata = response['Item']
-        birthday = f"{userdata['birthday']['year']}/{userdata['birthday']['month']}/{userdata['birthday']['day']}"
+        birthday = ''
+        if 'birthday' in userdata :
+            birthday = f"{userdata['birthday']['year']}/{userdata['birthday']['month']}/{userdata['birthday']['day']}"
+
+        kana_name_full = ''
+        if ('family_name_kana' in userdata) and ( 'given_name_kana'in userdata):
+            kana_name_full = userdata['family_name_kana'] + ' ' + userdata['given_name_kana']
+        
         ret_data ={
             report01.key_usrname : userdata['full_name']
-            ,report01.key_usrname_kana : userdata['family_name_kana'] + ' ' + userdata['given_name_kana']
-            ,report01.key_username_initial : userdata['initial']
+            ,report01.key_usrname_kana : kana_name_full
+            ,report01.key_username_initial : userdata['initial'] if 'initial' in userdata else ''
             ,report01.key_birthday : birthday
-            ,report01.key_gender : userdata['sex']
-            ,report01.key_train : userdata['train']
-            ,report01.key_station : userdata['station']
-            ,report01.key_address : userdata['address']
-            ,report01.key_educational_background : userdata['date_joined']
-            ,report01.key_qualification : userdata['qualifications']
-            ,report01.key_pr : userdata['pr']
+            ,report01.key_gender : userdata['sex'] if 'sex' in userdata else ''
+            ,report01.key_train : userdata['train'] if 'train' in userdata else ''
+            ,report01.key_station : userdata['station'] if 'station' in userdata else ''
+            ,report01.key_address : userdata['address'] if 'address' in userdata else ''
+            ,report01.key_educational_background : userdata['date_joined'] if 'date_joined' in userdata else ''
+            ,report01.key_qualification : userdata['qualifications'] if 'qualifications' in userdata else ''
+            ,report01.key_pr : userdata['pr'] if 'pr' in userdata else ''
         }
         return ret_data
     except Exception as ex:
@@ -175,8 +182,10 @@ def create_companydata(param_dict, param_printinf, userid) -> dict:
             common_log.output(common_log.LOG_INFO, 'COMPANY Nothing' ,None ,method ,602)
             return None
         company_data = response['Item']
-
-        address = company_data['address_1']
+        postalcd = company_data['postalcd'] if 'postalcd' in company_data else ''
+        if len(postalcd.strip()) > 0 :
+            postalcd = f'〒{postalcd}'
+        address = f"{postalcd} {company_data['address_1']}"
         if 'address_2' in company_data:
             address = address + company_data['address_2']
         if 'address_3' in company_data:
@@ -184,7 +193,7 @@ def create_companydata(param_dict, param_printinf, userid) -> dict:
 
         ret_data ={
             report01.key_company : company_data['company_name'] if 'company_name' in company_data else '',
-            report01.key_company_address : company_data['address'] if 'address' in company_data else '',
+            report01.key_company_address : address,
             report01.key_company_tel : company_data['tel'] if 'tel' in company_data else '',
             report01.key_company_fax : company_data['fax'] if 'fax' in company_data else '',
             report01.key_company_url : company_data['hp'] if 'hp' in company_data else '',
@@ -233,14 +242,26 @@ def create_historydata(param_dict, param_printinf, userid) -> dict:
             return result_list
         history_datas = responses['Items']
         for index  in  range(len(history_datas)):
+            scale = ''
+            if 'scale' in history_datas[index] :
+                if history_datas[index]['scale'] is None :
+                    scale = ''
+                else:
+                    scale = str(history_datas[index]['scale'])
+            position = ''
+            if 'position' in history_datas[index] :
+                if history_datas[index]['position'] is None :
+                    position = ''
+                else:
+                    position = str(history_datas[index]['position'])
             history = {
                 report01.key_hist_no : index + 1,
                 report01.key_hist_start_date : f"{history_datas[index]['work_from']}/01",
                 report01.key_hist_end_date : f"{history_datas[index]['work_to']}/01",
                 report01.key_hist_industry : history_datas[index]['industry'] if 'industry' in history_datas[index] else '',
                 report01.key_hist_system : history_datas[index]['jobname'] if 'jobname' in history_datas[index] else '',
-                report01.key_hist_scale : str(history_datas[index]['scale']) if 'scale' in history_datas[index] else '',
-                report01.key_hist_position : str(history_datas[index]['position']) if 'position' in history_datas[index] else '',
+                report01.key_hist_scale : scale,
+                report01.key_hist_position : position,
                 report01.key_hist_number_pepole : history_datas[index]['persons'] if 'persons' in history_datas[index] else '',
                 report01.key_hist_detail : history_datas[index]['details'] if 'details' in history_datas[index] else '',
             }
@@ -285,6 +306,8 @@ def get_envdict(typeName, envs) -> dict:
             continue
         if typeName != envs[index]['type']:
             continue
+        if (len(envs[index]['details'].strip()) <= 0 ):
+            continue
         ret_dict[envs[index]['details']] = envs[index]['version']
     return ret_dict
     
@@ -320,7 +343,7 @@ def post_main(param_dict, param_printinf, param_userlist, ret_dict) -> dict:
 
         #
         # 企業情報データ取得
-        company_data = {}
+        company_data = None
         common_log.output(common_log.LOG_DEBUG, f"is_company={param_printinf['is_company']}", None ,method ,402)
         if param_printinf['is_company']:
             company_data = create_companydata(param_dict, param_printinf, param_userlist[0])
@@ -336,7 +359,8 @@ def post_main(param_dict, param_printinf, param_userlist, ret_dict) -> dict:
                 # エラー発生
                 return None
             #ユーザデータに企業情報追加
-            user_data = { **user_data, **company_data}
+            if company_data is not None :
+                user_data = { **user_data, **company_data}
             # 1ユーザ分の業務経歴データ取得
             user_data['history'] = create_historydata(param_dict, param_printinf, userid)
             user_datas.append(user_data)

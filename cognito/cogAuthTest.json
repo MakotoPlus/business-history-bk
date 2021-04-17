@@ -1,0 +1,33 @@
+{
+	 'version':'1'
+	,'region':'ap-northeast-1'
+	,'userPoolId':'ap-northeast-1_ALjpPz2jY'
+	,'userName':'efd279b9-0e4b-4835-8a77-bc5ffd26514f'
+	,'callerContext':{
+		 'awsSdkVersion':'aws-sdk-unknown-unknown'
+		,'clientId':'393j5an8njrqql3jjn69nhnh7b'
+	}
+
+	,'triggerSource':'PostAuthentication_Authentication'
+	,'request':{
+		 'userAttributes':{
+			 'sub':'efd279b9-0e4b-4835-8a77-bc5ffd26514f'
+			,'email_verified':'true'
+			,'cognito:user_status':'CONFIRMED'
+			,'cognito:email_alias':'fukupeemail@gmail.com'
+			,'custom:admin':'0'
+			,'name':'fukupeemail@gmail.com'
+			,'given_name':'makotochange'
+			,'family_name':'fukuda name'
+			,'email':'fukupeemail@gmail.com'
+		}
+
+		,'newDeviceUsed':False
+	}
+
+	,'response':{
+		
+	}
+
+}
+

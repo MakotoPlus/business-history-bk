@@ -78,7 +78,8 @@ key_hist_jobmonth = 'job_hist_month' #就業期間（月)
 {
     req : {
         "out_name_type : "0",
-        "output_date": "2020/10/01"
+        "output_date": "2020/10/01",
+        "is_company" : True/False
     }
     data : {
         "out_name_type="0"
@@ -298,7 +299,7 @@ class BusinessHistoryFastPage:
         self.__set_meisai_job(page, 10, meisai_y, dict_data, history_data)
         self.__set_meisai_kotei(page, 139, meisai_y, dict_data, history_data)
         self.__set_meisai_env(page, 171, meisai_y, dict_data, history_data)
-        self.__set_fotter(page, page_max, 10, 30)
+        self.__set_fotter(dict_req, page, page_max, dict_data, 10, 30)
 
     def __get_age(self, dict_req, dict_data):
         '''
@@ -596,6 +597,7 @@ class BusinessHistoryFastPage:
             ("VALIGN", (2, 4), (7, 4), "TOP"),
             ("VALIGN", (3, 1), (7, 3), "MIDDLE"),
             ("ALIGN", (1, 1), (2, 3), "CENTER"),
+            ("ALIGN", (5, 1), (5, 1), "CENTER"),
             ("ALIGN", (6, 1), (6, 1), "CENTER"),
             ("ALIGN", (7, 1), (7, 1), "CENTER"),
 
@@ -616,6 +618,7 @@ class BusinessHistoryFastPage:
             ("VALIGN", (2,8), (7,8), "TOP"),
             ("VALIGN", (3,5), (7,7), "MIDDLE"),
             ("ALIGN", (1, 5), (2, 7), "CENTER"),
+            ("ALIGN", (5, 5), (5, 5), "CENTER"),            
             ("ALIGN", (6, 5), (6, 5), "CENTER"),            
             ("ALIGN", (7, 5), (7, 5), "CENTER"),            
 
@@ -636,6 +639,7 @@ class BusinessHistoryFastPage:
             ("VALIGN", (2,12), (7,12), "TOP"),
             ("VALIGN", (3,9), (7,11), "MIDDLE"),
             ("ALIGN", (1, 9), (2, 11), "CENTER"),
+            ("ALIGN", (5, 9), (5, 9), "CENTER"),            
             ("ALIGN", (6, 9), (6, 9), "CENTER"),            
             ("ALIGN", (7, 9), (7, 9), "CENTER"),            
 
@@ -657,6 +661,7 @@ class BusinessHistoryFastPage:
             ("VALIGN", (2,16), (7,16), "TOP"),
             ("VALIGN", (3,13), (7,15), "MIDDLE"),
             ("ALIGN", (1, 13), (2, 15), "CENTER"),
+            ("ALIGN", (5, 13), (5, 13), "CENTER"),            
             ("ALIGN", (6, 13), (6, 13), "CENTER"),            
             ("ALIGN", (7, 13), (7, 13), "CENTER"),            
 
@@ -677,6 +682,7 @@ class BusinessHistoryFastPage:
             ("VALIGN", (2,20), (7,20), "TOP"),
             ("VALIGN", (3,17), (7,19), "MIDDLE"),
             ("ALIGN", (1, 17), (2, 19), "CENTER"),
+            ("ALIGN", (5, 17), (5, 17), "CENTER"),            
             ("ALIGN", (6, 17), (6, 17), "CENTER"),            
             ("ALIGN", (7, 17), (7, 17), "CENTER"),            
             ]))
@@ -881,19 +887,44 @@ class BusinessHistoryFastPage:
         table.wrapOn(self.pdfFile, table_x*mm, table_y*mm)
         table.drawOn(self.pdfFile, table_x*mm, table_y*mm)
 
-    def __set_fotter(self, page, maxpage, fotter_x, fotter_y):
-        self.pdfFile.setFont(FONT_NAME, 8)
-        self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, '株式会社クロスアクティブ') 
+    def __set_fotter(self, dict_req, page, maxpage, dict_data, fotter_x, fotter_y):
+
+        self.pdfFile.setFont(FONT_NAME, 12)
+        output_data = dict_data[key_company] if key_company in dict_data else ''
+        self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, output_data) 
+        #self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, '株式会社クロスアクティブ') 
         ido = 3
         fotter_y -= ido
         self.pdfFile.setFont(FONT_NAME, 8)
-        self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, '〒102-0084 東京都千代田区二番町4番地3 二番町カシュービル5F') 
+        address = dict_data[key_company_address] if key_company_address in dict_data else ''
+        self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, address) 
+        #self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, '〒102-0084 東京都千代田区二番町4番地3 二番町カシュービル5F') 
         fotter_y -= ido
         self.pdfFile.setFont(FONT_NAME, 8)
-        self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, 'TEL:03-32633-8030 / FAX:03-3263-8090') 
+        tel = dict_data[key_company_tel] if key_company_tel in dict_data else ''
+        fax = dict_data[key_company_fax] if key_company_fax in dict_data else ''
+        if len(tel.strip()) > 0:
+            tel = 'TEL:' + tel.strip()
+        else:
+            tel =''
+        if len(fax.strip()) > 0:
+            fax = 'FAX:' + fax.strip()
+        else:
+            fax = ''
+        tel_fax = ''
+        if (len(tel) > 0) and (len(fax)>0) :
+            tel_fax = f"{tel} / {fax}"
+        else:
+            tel_fax = f"{tel}{fax}"
+        self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, tel_fax) 
+        #self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, 'TEL:03-32633-8030 / FAX:03-3263-8090') 
         fotter_y -= ido
         self.pdfFile.setFont(FONT_NAME, 8)
-        self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, 'URL:https://www.xactive.co.jp') 
+        company_url = dict_data[key_company_url] if key_company_url in dict_data else ''
+        if len(company_url) > 0 :
+            company_url = f"URL:{company_url}"
+        self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, company_url) 
+        #self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, 'URL:https://www.xactive.co.jp') 
 
         fotter_y -= ido
         self.pdfFile.setFont(FONT_NAME, 9)

@@ -3,6 +3,10 @@ service: business-history-bk
 # ApiGateway & Lambda版 (2021.03.31)
 #
 #
+# serverless deploy  --stage dev
+# serverless deploy  --stage prod
+# serverless deploy  --stage poc
+#
 # app and org for use with dashboard.serverless.com
 #app: business-history
 #org: business-history
