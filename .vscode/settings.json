@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "f:\\DocumentMakoto\\Job\\Project\\Angular\\business-history-bk\\venv\\Scripts\\python.exe"
+    "python.pythonPath": "F:\\DocumentMakoto\\Job\\Project\\Angular\\businesshistory-Project\\business-history-bk\\venv\\Scripts\\python.exe"
     ,"python.autoComplete.extraPaths": ["F:\\DocumentMakoto\\Job\\Project\\Angular\\business-history-bk\\layer\\common-layer\\layer\\python"]
     ,
     "python.envFile": "F:\\DocumentMakoto\\Job\\Project\\Angular\\business-history-bk\\.env",
