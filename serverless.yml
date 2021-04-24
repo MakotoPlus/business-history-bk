@@ -53,6 +53,8 @@ provider:
   environment:
     COGNITO_USERPOOL: business-history-cognito
     LAYER_COMMON: common-layer
+    # 時刻設定 UTC -> Tokyo
+    TZ: "Asia/Tyokyo"
     S3_BUCKET: ${self:custom.s3bucketname}
     ACCESS_CONTROL_ALLOW_ORIGIN: ${self:custom.ACCESS_CONTROL_ALLOW_ORIGIN}
     TABLE_M_USER: ${self:custom.TABLE.M_USER}
