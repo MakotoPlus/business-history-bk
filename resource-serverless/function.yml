@@ -15,6 +15,7 @@
   # https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html
   #---------------------------------------
 
+  # あとでコメントはずす 2021/05/29
   postConfirmation:
     handler: cognito/cognito_triger_PostConfirmation.run
     package:
@@ -28,6 +29,9 @@
     layers:
       - ${self:custom.LAYERS_01}
       - ${cf:${self:provider.environment.LAYER_COMMON}-${opt:stage, self:provider.stage}.CommonLayerExport}
+  #
+  # 一度全コンパイル時にここがエラーとなったが、一度コメントアウトして再度外したら正常終了した。
+  # その時のエラー内容は 「- Modifying service token is not allowed..」だった。
   postAuthentication:
     handler: cognito/cognito_triger_postAuthentication.run
     package:

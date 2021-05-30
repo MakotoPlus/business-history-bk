@@ -142,14 +142,3 @@ def run(event, context):
         return {}
 
 
-if __name__ == '__main__':
-    data = {
-        'userinfo' : {
-            'uuid' : '0001'
-            ,'family_name' : 'Fukuda'
-            ,'given_name' : 'Makoto'
-            ,'email' : 'Fukudapee@test.jp'
-        }
-    }
-    add_user(data)
-    print('end')

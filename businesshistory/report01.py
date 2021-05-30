@@ -1,4 +1,4 @@
-import json, math, io, six
+import json, math, io
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 from reportlab.pdfgen import canvas
