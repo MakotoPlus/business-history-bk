@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: report01",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/businesshistory/report01.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder};${workspaceFolder}/layer/common-layer/layer/python"
+            }
+        },
+        {
             "name": "Python: userinfo",
             "type": "python",
             "request": "launch",

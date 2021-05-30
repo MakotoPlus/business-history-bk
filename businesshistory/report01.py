@@ -1,4 +1,5 @@
-import json, math, io
+import json, math, io, six
+from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
@@ -68,6 +69,7 @@ key_hist_end_month = 'end_month'
 key_hist_job_yearmonth = 'job_year_month' #就業期間(X年Xヶ月)
 key_hist_jobmonth = 'job_hist_month' #就業期間（月)
 
+debug_print = False
 '''
 業務経歴書出力
 
@@ -76,104 +78,138 @@ key_hist_jobmonth = 'job_hist_month' #就業期間（月)
 
 業務報告書出力するための、JSon型データ定義
 {
-    req : {
-        "out_name_type : "0",
-        "output_date": "2020/10/01",
-        "is_company" : True/False
-    }
-    data : {
-        "out_name_type="0"
-        "output_date": "2020/10/01",
-        "company": "企業名",
-        "company_address": "企業住所",
-        "company_tel": "企業電話番号",
-        "company_fax": "企業FAX番号",
-        "company_url": "企業URL",
-        "usrname": "名前",
-        "usrname_kana": "カナ",
-        "username_initial = "M.F"
-        "birthday": "yyyy/mm/dd",
-        "gender": "男",
-        # 業務内容から算出
-        # "years_experience": "88年12ヶ月",
-        #
-        "train": "京浜東北",
-        "station": "蕨",
-        "address": "埼玉",
-        "educational_background": "中卒",
-        "qualification": "SAA",
-        "pr": "エクボ",
-        "history": [
-            {
-                "no": 1,
-                "start_date": "yyyy/mm/dd",
-                "end_date": "yyyy/mm/dd",
-                "industry": "金融",
-                "system": "AWSシステム",
-                "scale": "100人月",
-                "position": "M",
-                "number_pepole": "10",
-                "detail": "基本設計とぉー\n詳細",
-                "process": [
-                    "RD",
-                    "BD",
-                    "PS",
-                    "PG",
-                    "UT",
-                    "IT",
-                    "ST",
-                    "OT",
-                    "OM"
-                ],
-                "technology": {
-                    "db" : {
-                        "Oracle":"11g"
-                        ,"SQLite":"2.0"
-                    }
-                    ,"os" : {
-                        "Windows": "10"
-                    }
-                },
-            {
-                "no": 2,
-                "start_date": "yyyy/mm/dd",
-                "end_date": "yyyy/mm/dd",
-                "industry": "金融",
-                "system": "AWSシステム",
-                "scale": "100人月",
-                "position": "M",
-                "number_pepole": "10",
-                "detail": "基本設計とぉー\n詳細",
-                "process": [
-                    "RD",
-                    "BD",
-                    "PS",
-                    "PG",
-                    "UT",
-                    "IT",
-                    "ST",
-                    "OT",
-                    "OM"
-                ],
-                "technology": {
-                        "language" : {
-                            "java":"80"
-                            ,"C#":""
-                        }
-                        ,"fw" : {
-                            "Struts":"2.0"
-                        }
-                        ,"db" : {
-                            "Oracle":"11g"
-                            ,"SQLite":"2.0"
-                        }
-                        ,"os" : {
-                            "Windows": "10"
-                        }
-                }
-            }
-        ]
-    }
+	 'req':{
+		 'out_name_type':'0'
+		,'output_date':'2021/05/30'
+	}
+
+	,'data':{
+		 'usrname':'星 明'
+		,'usrname_kana':'セイ メイ'
+		,'username_initial':'M.F'
+		,'birthday':'2000/11/1'
+		,'gender':'男'
+		,'train':'山手線'
+		,'station':'渋谷'
+		,'address':'東京渋谷'
+		,'educational_background':'ＸＸ学校'
+		,'qualification':'特になし'
+		,'pr':'なんちゃってフルスタックエンジニア'
+		,'history':[
+			{
+				 'no':1
+				,'start_date':'2020/10/01'
+				,'end_date':'2020/11/01'
+				,'industry':'公共'
+				,'system':'検知システム2'
+				,'scale':'20'
+				,'position':'M'
+				,'number_pepole':Decimal('6')
+				,'detail':'商品化にともない、設計書整備、テスト、不具合改修'
+				,'process':[
+					 'ST'
+					,'PS'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Python':'3.6'
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'AWS':''
+						,'Lambda':''
+					}
+
+					,'db':{
+						 'DynamoDB':''
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':2
+				,'start_date':'2020/10/01'
+				,'end_date':'2020/11/01'
+				,'industry':'公共'
+				,'system':'検知システム'
+				,'scale':'20'
+				,'position':'M'
+				,'number_pepole':Decimal('6')
+				,'detail':'商品化にともない、設計書整備、テスト、不具合改修'
+				,'process':[
+					 'ST'
+					,'PS'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Python':'3.6'
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'AWS':''
+						,'Lambda':''
+					}
+
+					,'db':{
+						 'DynamoDB':''
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':3
+				,'start_date':'2019/02/01'
+				,'end_date':'2019/10/01'
+				,'industry':'自動車'
+				,'system':'システム移行及び改善'
+				,'scale':'12'
+				,'position':'M'
+				,'number_pepole':Decimal('3')
+				,'detail':'・既存の帳票出力システム（Excel)の機能改善作業\n・二つのWebシステムの脆弱性（クロスサイトスクリプト、セッションハイジャック）の対応。\n・４システムのクラウド移行作業\u3000COM（VB6.0)の VB.NET化、動作しないモジュールの改修、ADOの変更\n\u3000DB移行、IIS再構築など'
+				,'process':[
+					 'PG'
+					,'IT'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'ExcelVBA':''
+						,'Java':'8.0'
+						,'ASP':''
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'Windows':'10'
+					}
+
+					,'db':{
+						 'Oracle':'11g'
+					}
+				}
+			}
+		]
+	}
 }
 
 '''
@@ -221,7 +257,8 @@ class BusinessHistoryReport:
         #hisotryのデータ件数より出力ページ数を割出す
         #5件で1ページ
         list_history = dict_data['history']
-        print('list_history cnt=', len(list_history))
+        if debug_print :
+            print('list_history cnt=', len(list_history))
         if len(list_history) <= 0 :
             print('No data')
             return
@@ -293,13 +330,16 @@ class BusinessHistoryFastPage:
         history_data : list
             今回ページの出力対象の案件詳細情報(最大5件分)
         '''
-        meisai_y = 52
-        years_experience = self.__set_sumary(page, 10, 197, dict_data)
-        self.__set_header(dict_req, dict_data, years_experience)
+        header_y = 275
+        sumary_y = header_y - 88
+        meisai_y = sumary_y - 143
+        fotter_y = meisai_y - 15
+        years_experience = self.__set_sumary(page, 10, sumary_y, dict_data)
+        self.__set_header(dict_req, dict_data, years_experience, header_y)
         self.__set_meisai_job(page, 10, meisai_y, dict_data, history_data)
         self.__set_meisai_kotei(page, 139, meisai_y, dict_data, history_data)
         self.__set_meisai_env(page, 171, meisai_y, dict_data, history_data)
-        self.__set_fotter(dict_req, page, page_max, dict_data, 10, 30)
+        self.__set_fotter(dict_req, page, page_max, dict_data, 10, fotter_y)
 
     def __get_age(self, dict_req, dict_data):
         '''
@@ -360,7 +400,7 @@ class BusinessHistoryFastPage:
             return 0
 
 
-    def __set_header(self, dict_req, dict_data, years_experience):
+    def __set_header(self, dict_req, dict_data, years_experience, point_y):
         ''' ヘッダー情報設定
 
         Paramaters
@@ -371,12 +411,14 @@ class BusinessHistoryFastPage:
             出力対象全データ
         years_experience : str
             経験年数(NN年NNヶ月)
+        point_y :
+            出力Y位置
 
         '''
         self.pdfFile.setFont(FONT_NAME, 18)
-        self.pdfFile.drawString(10*mm, 285*mm, '業務経歴書') 
+        self.pdfFile.drawString(10*mm, point_y*mm, '業務経歴書') 
         self.pdfFile.setFont(FONT_NAME, 8)
-        self.pdfFile.drawString(170*mm, 285*mm, dict_req[key_output_date] + ' 現在') 
+        self.pdfFile.drawString(170*mm, point_y*mm, dict_req[key_output_date] + ' 現在') 
         self.pdfFile.setFont(FONT_NAME, 9)
 
         #誕生日と、出力年月(output_date)より年齢を計算する
@@ -457,8 +499,8 @@ class BusinessHistoryFastPage:
             ('BACKGROUND', (5, 4), (5, 4), colors.lightgrey),            
             ]))
 
-        table.wrapOn(self.pdfFile, 10*mm, 240*mm)
-        table.drawOn(self.pdfFile, 10*mm, 240*mm)
+        table.wrapOn(self.pdfFile, 10*mm, (point_y-45)*mm)
+        table.drawOn(self.pdfFile, 10*mm, (point_y-45)*mm)
 
     def __set_sumary(self, page, table_x, table_y, dict_data):
         '''
@@ -690,7 +732,7 @@ class BusinessHistoryFastPage:
         table.drawOn(self.pdfFile, table_x*mm, table_y*mm)
 
         self.pdfFile.setFont(FONT_NAME, 9)
-        self.pdfFile.drawString(10*mm, 47*mm, '※ PM:プロジェクトマネージャ/PL:プロジェクトリーダ/SL:サブリーダ/M:メンバ/AM:アーキテクト') 
+        self.pdfFile.drawString(table_x*mm, (table_y-5)*mm, '※ PM:プロジェクトマネージャ/PL:プロジェクトリーダ/SL:サブリーダ/M:メンバ/AM:アーキテクト') 
 
     def __set_meisai_kotei(self, page, table_x, table_y,dict_data, history_data):
         '''
@@ -702,7 +744,8 @@ class BusinessHistoryFastPage:
         '''
 
         kotei_list = self.__get_meisai_kotei_list(history_data)
-        print(kotei_list)
+        if debug_print :
+            print(kotei_list)
         data = [['工程','対象']]
         data.extend(kotei_list)
         data.append(['','']) #dummy
@@ -892,13 +935,11 @@ class BusinessHistoryFastPage:
         self.pdfFile.setFont(FONT_NAME, 12)
         output_data = dict_data[key_company] if key_company in dict_data else ''
         self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, output_data) 
-        #self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, '株式会社クロスアクティブ') 
         ido = 3
-        fotter_y -= ido
+        fotter_y -= 5
         self.pdfFile.setFont(FONT_NAME, 8)
         address = dict_data[key_company_address] if key_company_address in dict_data else ''
         self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, address) 
-        #self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, '〒102-0084 東京都千代田区二番町4番地3 二番町カシュービル5F') 
         fotter_y -= ido
         self.pdfFile.setFont(FONT_NAME, 8)
         tel = dict_data[key_company_tel] if key_company_tel in dict_data else ''
@@ -917,14 +958,12 @@ class BusinessHistoryFastPage:
         else:
             tel_fax = f"{tel}{fax}"
         self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, tel_fax) 
-        #self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, 'TEL:03-32633-8030 / FAX:03-3263-8090') 
         fotter_y -= ido
         self.pdfFile.setFont(FONT_NAME, 8)
         company_url = dict_data[key_company_url] if key_company_url in dict_data else ''
         if len(company_url) > 0 :
             company_url = f"URL:{company_url}"
         self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, company_url) 
-        #self.pdfFile.drawString(fotter_x*mm, fotter_y*mm, 'URL:https://www.xactive.co.jp') 
 
         fotter_y -= ido
         self.pdfFile.setFont(FONT_NAME, 9)
@@ -967,7 +1006,8 @@ class BusinessHistoryFastPage:
             存在しない場合は、空の文字が設定されたリストを返す。
             最低でも9のリストを返す
         '''
-        print('sumary--start')
+        if debug_print :
+            print('sumary--start')
         #
         # 1. 全ての業務報告書の期間を算出する。
         #s_target = json.dumps(dict_data[key_history])
@@ -1004,18 +1044,17 @@ class BusinessHistoryFastPage:
         # 言語は、下記のような構成で降順に設定される
         #  [ {'Java', 10.0},{'COBOL',9.5}]
         kotei_values_dict = self.__summary_kotei(dict_data)
-        print(dict_data)
         langs_list = self.__tecnorogy_sumary(dict_data, key_language, 9)
-        print(langs_list)
         fw_list = self.__tecnorogy_sumary(dict_data, key_fw, 9)
-        print(fw_list)
         db_list = self.__tecnorogy_sumary(dict_data, key_db, 9)
-        print(db_list)
         os_list = self.__tecnorogy_sumary(dict_data, key_os, 9)
-        print(os_list)
-        #df_s = pd.read_json(s_target)
-        #print(df_s)
-        #print('sumary--end')
+        if debug_print :
+            print(dict_data)
+            print(langs_list)
+            print(fw_list)
+            print(db_list)
+            print(os_list)
+
 
         return years_experience, kotei_values_dict, langs_list, fw_list, db_list, os_list
 
@@ -1046,17 +1085,14 @@ class BusinessHistoryFastPage:
         #dictを生成
         kotei_list['kotei'] = item_list
         kotei_list['value'] = item_value
-        print( '----------------------------------------')
-        print(kotei_list)
+        if debug_print :
+            print( '----------------------------------------')
+            print(kotei_list)
         # 2.pandasデータ生成
-        print( '----------------------------------------')
         pd_kotei = pd.read_json(json.dumps(kotei_list))
-        print(pd_kotei)
-        print( '----------------------------------------')     
-
-        #print(pd_kotei.describe())
-        #print(pd_kotei.groupby(['kotei'])['value'].sum())
-
+        if debug_print :
+            print( '----------------------------------------')
+            print(pd_kotei)
 
         #集計
         # 工程単位で就業月をサマリしたdictを生成する
@@ -1170,7 +1206,6 @@ class BusinessHistoryFastPage:
             
         '''
 
-        debug_print = False
         if debug_print:
             print( 'start __tecnorogy_sumary parameter={0}'.format(tecnorogy_param))
 
@@ -1302,13 +1337,32 @@ class BusinessHistoryFastPage:
                 ret_list.append(add)
         return ret_list
 
+'''
+class DecimalEncoder(json.JSONDecoder):
+    #def default(self, obj):
+    #   if isinstance(obj, Decimal):
+    #       return int(obj)
+    #   return json.JSONDecoder.default(self, obj)
+    #def decode(self, obj):
+    #    super().decode(obj)
+    @classmethod
+    def object_hook(cls, obj):
+        for key in obj:
+            if isinstance(key, six.string_types):
+                if 'type{decimal}' == key:
+                    try:
+                        return Decimal(obj[key])
+                    except:
+                        pass
+'''
 
 if __name__ == '__main__':
     print('start')
 
     FILENAME="./testdata001.json"
-    
+    debug_print = True
     with open(FILENAME, mode='r', encoding="utf_8") as fd:
+        #data = json.load(fd, cls=DecimalEncoder)
         data = json.load(fd)
     print("date : ", data)
     print( type(data))

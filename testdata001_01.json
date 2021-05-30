@@ -1,0 +1,497 @@
+{
+	 'req':{
+		 'out_name_type':'0'
+		,'output_date':'2021/05/30'
+	}
+
+	,'data':{
+		 'usrname':'星 明'
+		,'usrname_kana':'セイ メイ'
+		,'username_initial':'M.F'
+		,'birthday':'2000/11/1'
+		,'gender':'男'
+		,'train':'山手線'
+		,'station':'渋谷'
+		,'address':'東京渋谷'
+		,'educational_background':'ＸＸ学校'
+		,'qualification':'特になし'
+		,'pr':'なんちゃってフルスタックエンジニア'
+		,'history':[
+			{
+				 'no':1
+				,'start_date':'2020/10/01'
+				,'end_date':'2020/11/01'
+				,'industry':'公共'
+				,'system':'検知システム2'
+				,'scale':'20'
+				,'position':'M'
+				,'number_pepole':Decimal('6')
+				,'detail':'商品化にともない、設計書整備、テスト、不具合改修'
+				,'process':[
+					 'ST'
+					,'PS'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Python':'3.6'
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'AWS':''
+						,'Lambda':''
+					}
+
+					,'db':{
+						 'DynamoDB':''
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':2
+				,'start_date':'2020/10/01'
+				,'end_date':'2020/11/01'
+				,'industry':'公共'
+				,'system':'検知システム'
+				,'scale':'20'
+				,'position':'M'
+				,'number_pepole':Decimal('6')
+				,'detail':'商品化にともない、設計書整備、テスト、不具合改修'
+				,'process':[
+					 'ST'
+					,'PS'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Python':'3.6'
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'AWS':''
+						,'Lambda':''
+					}
+
+					,'db':{
+						 'DynamoDB':''
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':3
+				,'start_date':'2019/02/01'
+				,'end_date':'2019/10/01'
+				,'industry':'自動車'
+				,'system':'システム移行及び改善'
+				,'scale':'12'
+				,'position':'M'
+				,'number_pepole':Decimal('3')
+				,'detail':'・既存の帳票出力システム（Excel)の機能改善作業\n・二つのWebシステムの脆弱性（クロスサイトスクリプト、セッションハイジャック）の対応。\n・４システムのクラウド移行作業\u3000COM（VB6.0)の VB.NET化、動作しないモジュールの改修、ADOの変更\n\u3000DB移行、IIS再構築など'
+				,'process':[
+					 'PG'
+					,'IT'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'ExcelVBA':''
+						,'Java':'8.0'
+						,'ASP':''
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'Windows':'10'
+					}
+
+					,'db':{
+						 'Oracle':'11g'
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':4
+				,'start_date':'2018/11/01'
+				,'end_date':'2020/12/01'
+				,'industry':'医療'
+				,'system':'治験見積作成システム'
+				,'scale':'11'
+				,'position':'PM'
+				,'number_pepole':Decimal('3')
+				,'detail':'治験プロジェクトの見積書作成システム新規構築\n提案～導入'
+				,'process':[
+					 'ST'
+					,'RD'
+					,'BD'
+					,'PS'
+					,'OT'
+					,'PG'
+					,'IT'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Python':'3.6'
+					}
+
+					,'fw':{
+						 'Django':'2.2'
+						,'Bootstrap':'4.0'
+						,'pywin32':''
+					}
+
+					,'os':{
+						 'Git':''
+						,'ADFS':'2.0'
+						,'JMeter':'5.3'
+					}
+
+					,'db':{
+						 'MySQL':'8.0'
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':5
+				,'start_date':'2018/06/01'
+				,'end_date':'2018/09/01'
+				,'industry':'石油'
+				,'system':'Windows10対応'
+				,'scale':'3'
+				,'position':'PM'
+				,'number_pepole':Decimal('2')
+				,'detail':'クライアント端末をWindwos10に切替えるために、\n販売Webシステム、売掛金システムの正常動作確認および対応'
+				,'process':[
+					 'ST'
+					,'PS'
+					,'PG'
+					,'IT'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'ASP':''
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'Windows':'10'
+					}
+
+					,'db':{
+						 'Oracle':'11g'
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':6
+				,'start_date':'2013/01/01'
+				,'end_date':'2017/03/01'
+				,'industry':'金融'
+				,'system':'統合案件 3-2フェーズ\n(取引先情報検索)'
+				,'scale':''
+				,'position':'M'
+				,'number_pepole':''
+				,'detail':'合併に伴う。システム統合アプリケーション開発\nサブシステム（取引先情報検索）機能'
+				,'process':[
+					 'RD'
+					,'BD'
+					,'PS'
+					,'PG'
+					,'IT'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Java':''
+					}
+
+					,'fw':{
+						 'WAS':''
+					}
+
+					,'os':{
+						
+					}
+
+					,'db':{
+						 'Oracle':'11g'
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':7
+				,'start_date':'2011/04/01'
+				,'end_date':'2012/10/01'
+				,'industry':'カード'
+				,'system':'決済管理'
+				,'scale':'500'
+				,'position':'M'
+				,'number_pepole':Decimal('10')
+				,'detail':'非接触カードにおける決済新サービス機能拡張を担当\nサーバ移行に伴う。移行計画作業、移行ツール設計、管理 移行計画作業を担当'
+				,'process':[
+					 'OM'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Java':''
+						,'UnixC':''
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'Windows Server':'2003'
+					}
+
+					,'db':{
+						 'Oracle':''
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':8
+				,'start_date':'2010/11/01'
+				,'end_date':'2011/03/01'
+				,'industry':'カード'
+				,'system':'個人向け金融商品販売\n実績管理システム'
+				,'scale':'20'
+				,'position':'PM'
+				,'number_pepole':Decimal('10')
+				,'detail':'金融商品の販売実績管理システムの新規構築。\nプロジェクトへは外部設計から参画し、プロジェクトマネージャーとして、製造から単体テストまでを\n一括請負にて担当。メンバーは最大稼動時で10名/月'
+				,'process':[
+					 'BD'
+					,'PS'
+					,'PG'
+					,'IT'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Java':''
+						,'JavaScript':''
+					}
+
+					,'fw':{
+						 'Seasar2':''
+						,'SAStruts':''
+					}
+
+					,'os':{
+						
+					}
+
+					,'db':{
+						 'Oracle':'10g'
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':9
+				,'start_date':'2010/01/01'
+				,'end_date':'2010/10/01'
+				,'industry':'カード'
+				,'system':'決済管理'
+				,'scale':'15'
+				,'position':'M'
+				,'number_pepole':Decimal('3')
+				,'detail':'非接触カードにおける決済新サービス機能拡張を担当\n・基本設計、結合テスト実施を担当（開発はオフシュア）\n・サーバソフトアップグレードの導入検証'
+				,'process':[
+					 'OM'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Java':''
+						,'UnixC':''
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'Windows Server':'2003'
+					}
+
+					,'db':{
+						 'Oracle':''
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':10
+				,'start_date':'2009/04/01'
+				,'end_date':'2009/07/01'
+				,'industry':'通信業'
+				,'system':'施工管理システム'
+				,'scale':'20'
+				,'position':'PL'
+				,'number_pepole':Decimal('7')
+				,'detail':'施工工程管理システム\n・現行システム解析及び、ユーザヒアリングを担当'
+				,'process':[
+					 'RD'
+				]
+
+				,'technology':{
+					 'language':{
+						 'ASP.NET':''
+						,'C#':''
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						
+					}
+
+					,'db':{
+						
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':11
+				,'start_date':'2008/08/01'
+				,'end_date':'2009/03/01'
+				,'industry':'生保'
+				,'system':'医療データ標準化'
+				,'scale':'30'
+				,'position':'M'
+				,'number_pepole':Decimal('3')
+				,'detail':'診断書内容の点数計算ASPサービスシステム\n・診断書情報と点数計算のエンジン部分の開発を担当'
+				,'process':[
+					 'ST'
+					,'BD'
+					,'PS'
+					,'PG'
+					,'IT'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Java':''
+					}
+
+					,'fw':{
+						 'Seasar2':''
+					}
+
+					,'os':{
+						
+					}
+
+					,'db':{
+						 'Orace':''
+					}
+
+				}
+
+			}
+
+			,{
+				 'no':12
+				,'start_date':'2006/01/01'
+				,'end_date':'2007/10/01'
+				,'industry':'小売業'
+				,'system':'化粧品BPR開発'
+				,'scale':'50'
+				,'position':'PM'
+				,'number_pepole':Decimal('20')
+				,'detail':'基幹システムにおけるシステム再構築\n・属性サブシステムを担当\u3000(詳細工程から結合までは請負契約にて実施)'
+				,'process':[
+					 'ST'
+					,'RD'
+					,'BD'
+					,'PS'
+					,'PG'
+					,'IT'
+					,'UT'
+				]
+
+				,'technology':{
+					 'language':{
+						 'Java':''
+						,'Intera-Mart':''
+						,'COBOL':''
+					}
+
+					,'fw':{
+						
+					}
+
+					,'os':{
+						 'I5':''
+					}
+
+					,'db':{
+						 'DB2':''
+					}
+
+				}
+
+			}
+
+		]
+
+	}
+
+}
+
