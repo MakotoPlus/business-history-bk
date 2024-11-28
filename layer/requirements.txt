@@ -1,0 +1,7 @@
+#
+# Layer用のPipファイル
+reportlab==3.5.56
+python-dateutil== 2.8.2
+MonthDelta
+#AWSが容易してくれている奴を利用する
+#numpy==1.19.5

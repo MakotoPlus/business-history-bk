@@ -3,24 +3,16 @@ service: business-history-bk
 # ApiGateway & Lambda版 (2021.03.31)
 #
 #
-# serverless deploy  --stage dev
-# serverless deploy  --stage prod
-# serverless deploy  --stage poc
+# serverless deploy --stage dev
+# serverless deploy --stage prod
+# serverless deploy --stage poc なぞにこっちが本番
 #
 # app and org for use with dashboard.serverless.com
 #app: business-history
 #org: business-history
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
-frameworkVersion: '2'
-
-plugins:
-  - serverless-offline
-  - serverless-dynamodb-local
-#------------------------------------------------------------
-# こいつを有効にすると 関数のみのDeployが失敗するので注意
-#  - serverless-python-requirements
-#------------------------------------------------------------
+frameworkVersion: '3'
 
 custom:
   cognito-name: business-history
@@ -29,6 +21,7 @@ custom:
   AUTHORIZER_NAME: ${self:provider.stage}-business-history-bk
   ROLE_ARN: ${file(./conf/${self:provider.stage}.yml):ROLE_ARN}
   LAYERS_01: ${file(./conf/${self:provider.stage}.yml):LAYERS_01}
+  LAYER_PANDAS: ${file(./conf/${self:provider.stage}.yml):LAYER_PANDAS}
   DYNAMODB_ENDPOINT: ${file(./conf/${self:provider.stage}.yml):DYNAMODB_ENDPOINT}
   TABLE:
     M_USER: ${self:provider.stage}_${file(./conf/${self:provider.stage}.yml):TABLE.M_USER}
@@ -38,7 +31,7 @@ custom:
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.10
   stage: ${self:custom.stage}
   lambdaHashingVersion: 20201221
   region: ap-northeast-1

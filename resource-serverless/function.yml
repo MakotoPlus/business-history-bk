@@ -74,6 +74,7 @@
             Ref: ApiGatewayAuthorizer
     layers:
       - ${self:custom.LAYERS_01}
+      - ${self:custom.LAYER_PANDAS}
       - ${cf:${self:provider.environment.LAYER_COMMON}-${opt:stage, self:provider.stage}.CommonLayerExport}
   userinfo-put:
     handler: userinfo/userinfo-update.run
